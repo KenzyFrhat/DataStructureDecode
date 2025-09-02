@@ -15,17 +15,18 @@ public:
 
 
 class LinkedListIterator {
-private:
+public:
 	LinkedListNode* currentNode = NULL;
 
 public:
-	LinkedListIterator() { currentNode = NULL; }
+	LinkedListIterator() { }
 
 	LinkedListIterator(LinkedListNode* node) { currentNode = node; }
 
-	int CurrentData() {
+	//TODO: the return data type may be NULL which is not suited with the return data type int CurrentData() 
+	/*int CurrentData() {
 		return currentNode->data;
-	}
+	}*/
 
 
 	LinkedListIterator next() {
@@ -45,8 +46,8 @@ public:
 	}
 
 	void PrintList() {
-		for (LinkedListIterator itr = this->begin(); itr.CurrentData() != NULL; itr.next()) {
-			cout << itr.CurrentData() << " -> ";
+		for (LinkedListIterator itr = this->begin(); itr.currentNode != NULL; itr.next()) {
+			cout << itr.currentNode->data << " -> ";
 		}
 		cout << '\n';
 	}
@@ -63,22 +64,50 @@ public:
 		}
 	}
 
+	LinkedListNode* FindNodeWithData(int data) {
+		//validations
+		// linkedlist is empty -> null
+		if (this->head == NULL) {
+			return NULL;
+		}
+
+		// use iterator to itrate through list and check for the linked list data 
+		for (LinkedListIterator itr = this->begin(); itr.currentNode != NULL; itr.next()) {
+			if (itr.currentNode->data == data)
+				return  itr.currentNode;
+		}
+
+		return NULL;
+	}
+
+
+	LinkedListNode* InsertAfter(int _data, LinkedListNode* nodeToInsertAfter) {
+		if (this->head == NULL || nodeToInsertAfter == NULL)  //no data , no list -> no action
+			return NULL;
+
+		LinkedListNode* newNode = new LinkedListNode(_data);
+
+		//default state 
+		newNode->next = nodeToInsertAfter->next;
+		nodeToInsertAfter->next = newNode;
+		
+        if (this->tail == nodeToInsertAfter)
+			this->tail = newNode;
+
+		return newNode;
+
+	}
+
 
 };
 
 
 
 int main() {
-	LinkedList* linkedlist = new LinkedList();
-	cout << "The head of linked list is " << linkedlist->head << endl;
-	LinkedListNode* node = new LinkedListNode(88);
 
-	for (int i = 1; i < 11; i++) {
-		cout << "index " << i - 1 << ": " << i << endl;
-		linkedlist->InsertLast(i);
-	}
-
-	linkedlist->PrintList();
-
-
+	LinkedList* list = new LinkedList();
+	list->InsertLast(70);
+	LinkedListNode* node  = list->FindNodeWithData(70);
+	cout << "node data : " << node->data << endl;
+	cout << "node next : " << node->next;
 }
