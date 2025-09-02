@@ -1,0 +1,41 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+*.log
+*.tlog
+
+# C/C++
+*.obj
+*.pdb
+*.pch
+*.exe
+*.dll
+*.lib
+*.ilk
+
+# Python
+_pycache_/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+env/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
