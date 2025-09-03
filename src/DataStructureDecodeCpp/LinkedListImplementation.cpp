@@ -289,7 +289,7 @@ public:
 		//insertion process in the middle
 		InsertedNode->next = NodeBefore->next;
 		InsertedNode->prev = NodeBefore;
-		NodeBefore->next = InsertedNode;
+		NodeBefore->next = InsertedNode; 
 
 		// any chaning to NodeBefore will effect the existing data inside the linkedlist - they are just pointers that point to the same data 
 		// so in case the nodeBefore was the head - no nead to change head data it is already has been changed by the other pointer NodeBefore
@@ -299,23 +299,84 @@ public:
 		}
 
 		if (NodeBefore == this->tail) {
-			cout << "Tail catched!" << endl;
 			this->tail = InsertedNode;
 		}
 
 
 	}
-        
- 
-		
 
 	// insert Before
-	// delete node
-	// delete head
-	// delete tail
-	// Find node
-	// delete by value
+	void InsertBefore(int InsertedData, int SelectedData) {
+		// validation
+		if (this->head == NULL)
+			return;
 
+		// search for SelectedNode
+		DoublyLinkedListNode* SelectedNode = FindNode(SelectedData);
+		if (SelectedNode == NULL)
+			return;
+
+		DoublyLinkedListNode* InsertedNode = new DoublyLinkedListNode(InsertedData);
+		// progress
+
+		InsertedNode->next = SelectedNode;
+		InsertedNode->prev = SelectedNode->prev;
+
+		if (SelectedNode->prev != NULL) {
+			SelectedNode->prev->next = InsertedNode;
+		}
+
+		SelectedNode->prev = InsertedNode;
+
+		/*if(this->head->next == SelectedNode) {
+			this->head->next = InsertedNode;
+		}*/
+
+	    if (SelectedNode == this->head) {
+			this->head = InsertedNode;
+		}
+	
+
+	}
+	// delete node
+	void DeleteNode(DoublyLinkedListNode* NodeToDelete) {
+		if (this->head == NULL)  return;
+
+		if (NodeToDelete == NULL) return;
+
+		if (this->head == this->tail) {
+			this->head = NULL;
+			return;
+		}
+
+		if (NodeToDelete == this->head) {
+			this->head = this->head->next;
+		}
+
+		else if (NodeToDelete == this->tail) {
+			this->tail = this->tail->prev;
+		}
+		else {
+			NodeToDelete->next->prev = NodeToDelete->prev;
+			NodeToDelete->prev->next = NodeToDelete->next;
+		}
+
+		NodeToDelete = NULL;
+
+	}
+	// delete head
+	void DeleteHead() {
+		this->DeleteNode(this->head);
+	}
+	// delete tail
+	void DeleteTail() {
+		this->DeleteNode(this->tail);
+	}
+	// delete by data 
+	void Delete(int data) {
+		this->DeleteNode(this->FindNode(data));
+	}
+	
 	
 
 };
@@ -324,7 +385,7 @@ public:
 
 int main() {
 	//TODO: do the same fuctions on the douply linked list 
-	DoublyLinkedList* list = new DoublyLinkedList();
+	
 	/*list->InsertLast(100);
 	list->InsertLast(200);
 	list->InsertLast(300);
@@ -332,113 +393,236 @@ int main() {
 
 	list->PrintList();*/
 
-	list->InserAfter(100, 200);  //no change 
-	if (list->head == NULL)
-		cout << "Empty list";
+	//list->InserAfter(100, 200);  //no change 
+	//if (list->head == NULL)
+	//	cout << "Empty list";
 
-	list->InsertLast(600);  
-	//list->InserAfter(300, 100);  // no change 
-	list->PrintList();  //600
-    //cout << "no chaging, selected node is not found\n";
+	//list->InsertLast(600);  
+	////list->InserAfter(300, 100);  // no change 
+	//list->PrintList();  //600
+ //   //cout << "no chaging, selected node is not found\n";
 
+	//
+	///*list->InserAfter(350, 500);*/
+	//
+	//cout << "||| adding 500, 400 ||| using insertLast\n";
+	//list->InsertLast(500);
+	//list->InsertLast(400);
+ //   list->PrintList();// 600, 500, 350, 400
+	////cout << "||| Insert after head |||\n";
+	////list->InserAfter(100, 600); // after head
+	////list->PrintList(); //600, 100, 500, 350, 400
+	//cout << "=====================================================" << endl;
+	//cout << "[ | List details | ]\n";
+	//cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	//cout << "    data : " << list->head->data << endl;
+	//cout << "    node next data: " << list->head->next->data << endl;
+
+ //   cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	//cout << "    data : " << list->tail->data << endl;
+	//cout << "    node prev data : " << list->tail->prev->data << endl;
+	//cout << "=====================================================" << endl << endl;
+
+
+	//list->InserAfter(50, 400); // after tail
+	//cout << "||| Add 50 after 400 |||" << endl;
+	//list->PrintList();
+	//cout << "=====================================================";
+	//cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	//cout << "    data : " << list->head->data << endl;
+	//cout << "    node next data: " << list->head->next->data << endl;
+
+	//cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	//cout << "    data : " << list->tail->data << endl;
+	//cout << "    node prev data : " << list->tail->prev->data << endl;
+
+
+	//cout << "=====================================================" << endl;
+
+
+	////cout << "\nHead: " << list->head << "\nTail: " << list->tail;
+
+	//list->InserAfter(90, 400); // previous of tail
+	//cout << "||| Add 90 after 400 |||" << endl;
+	//list->PrintList();
+	//cout << "=====================================================";
+	//cout << "[ | List details | ]\n";
+	//cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	//cout << "    data : " << list->head->data << endl;
+	//cout << "    node next data: " << list->head->next->data << endl;
+
+	//cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	//cout << "    data : " << list->tail->data << endl;
+	//cout << "    node prev data : " << list->tail->prev->data << endl;
+	//cout << "=====================================================" << endl;
+
+
+	//list->InserAfter(77, 400); // previous of tail
+	//cout << "||| Add 77 after 400 |||" << endl;
+	//list->PrintList();
+	//cout << "=====================================================";
+	//cout << "[ | List details | ]\n";
+	//cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	//cout << "    data : " << list->head->data << endl;
+	//cout << "    node next data: " << list->head->next->data << endl;
+
+	//cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	//cout << "    data : " << list->tail->data << endl;
+	//cout << "    node prev data : " << list->tail->prev->data << endl;
+	//cout << "=====================================================" << endl;
+
+	//list->InserAfter(80, 600); // previous of tail
+	//cout << "||| Add 80 after 600 |||" << endl;
+	//list->PrintList();
+	//cout << "=====================================================";
+	//cout << "[ | List details | ]\n";
+	//cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	//cout << "    data : " << list->head->data << endl;
+	//cout << "    node next data: " << list->head->next->data << endl;
+
+	//cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	//cout << "    data : " << list->tail->data << endl;
+	//cout << "    node prev data : " << list->tail->prev->data << endl;
+	//cout << "=====================================================" << endl;
+
+	//list->InserAfter(54, 50); // after tail
+	//cout << "||| Add 54 after 50 |||" << endl;
+	//list->PrintList();
+	//cout << "=====================================================";
+	//cout << "[ | List details | ]\n";
+	//cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	//cout << "    data : " << list->head->data << endl;
+	//cout << "    node next data: " << list->head->next->data << endl;
+
+	//cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	//cout << "    data : " << list->tail->data << endl;
+	//cout << "    node prev data : " << list->tail->prev->data << endl;
+	//////////////////////////////////////////////////////////////
+    
+DoublyLinkedList* list = new DoublyLinkedList();
 	
-	/*list->InserAfter(350, 500);*/
+    list->InsertLast(600);
+	cout << "List is : "; list->PrintList();
+	list->DeleteNode(list->FindNode(600)); // sengle node in list
+	cout << "After deleting 600 : "; list->PrintList();
+
+	/*list->InsertLast(45);
+	list->InsertBefore(800, 45);
+	cout << "new list : ";  list->PrintList(); 
+
+	list->DeleteNode(list->FindNode(800));
+	cout << "After deleting 800 : "; list->PrintList();
 	
-	cout << "||| adding 500, 400 ||| using insertLast\n";
-	list->InsertLast(500);
-	list->InsertLast(400);
-    list->PrintList();// 600, 500, 350, 400
-	//cout << "||| Insert after head |||\n";
-	//list->InserAfter(100, 600); // after head
-	//list->PrintList(); //600, 100, 500, 350, 400
-	cout << "=====================================================" << endl;
-	cout << "[ | List details | ]\n";
-	cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
-	cout << "    data : " << list->head->data << endl;
-	cout << "    node next data: " << list->head->next->data << endl;
-
-    cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
-	cout << "    data : " << list->tail->data << endl;
-	cout << "    node prev data : " << list->tail->prev->data << endl;
-	cout << "=====================================================" << endl << endl;
+	cout << "Adding 85 at the start: " << endl;
+	list->InsertBefore(85, list->head->data);
+	list->PrintList();  
+	cout << "Deleting tail (45): ";
+	list->DeleteNode(list->FindNode(45));
 
 
-	list->InserAfter(50, 400); // after tail
-	cout << "||| Add 50 after 400 |||" << endl;
-	list->PrintList();
-	cout << "=====================================================";
-	cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
-	cout << "    data : " << list->head->data << endl;
-	cout << "    node next data: " << list->head->next->data << endl;
+	cout << "Adding 90, 43, 32 , 65 at the end: ";
+	list->InsertLast(90);
+	list->InsertLast(43);
+	list->InsertLast(32);
+	list->InsertLast(65);
 
-	cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
-	cout << "    data : " << list->tail->data << endl;
-	cout << "    node prev data : " << list->tail->prev->data << endl;
+	cout << "new list : ";  list->PrintList();
 
+	list->DeleteNode(list->FindNode(32));
+	cout << "Delete 32: "; list->PrintList();*/
 
-	cout << "=====================================================" << endl;
+	//cout << "||| adding 500, 400 ||| using insertLast\n";
+	//list->InsertLast(500);
+	//list->InsertLast(400);
+	//list->PrintList();
+	//cout << "=====================================================" << endl;
+	//cout << "[ | List details | ]\n";
+	//cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	//cout << "    data : " << list->head->data << endl;
+	//cout << "    node next data: " << list->head->next->data << endl;
 
-
-	//cout << "\nHead: " << list->head << "\nTail: " << list->tail;
-
-	list->InserAfter(90, 400); // previous of tail
-	cout << "||| Add 90 after 400 |||" << endl;
-	list->PrintList();
-	cout << "=====================================================";
-	cout << "[ | List details | ]\n";
-	cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
-	cout << "    data : " << list->head->data << endl;
-	cout << "    node next data: " << list->head->next->data << endl;
-
-	cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
-	cout << "    data : " << list->tail->data << endl;
-	cout << "    node prev data : " << list->tail->prev->data << endl;
-	cout << "=====================================================" << endl;
+	//cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	//cout << "    data : " << list->tail->data << endl;
+	//cout << "    node prev data : " << list->tail->prev->data << endl;
+	//cout << "=====================================================" << endl << endl;
 
 
-	list->InserAfter(77, 400); // previous of tail
-	cout << "||| Add 77 after 400 |||" << endl;
-	list->PrintList();
-	cout << "=====================================================";
-	cout << "[ | List details | ]\n";
-	cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
-	cout << "    data : " << list->head->data << endl;
-	cout << "    node next data: " << list->head->next->data << endl;
+	//list->InsertBefore(50, 400); // after tail
+	//cout << "||| Add 50 before 400 |||" << endl;
+	//list->PrintList();
+	//cout << "=====================================================";
+	//cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	//cout << "    data : " << list->head->data << endl;
+	//cout << "    node next data: " << list->head->next->data << endl;
 
-	cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
-	cout << "    data : " << list->tail->data << endl;
-	cout << "    node prev data : " << list->tail->prev->data << endl;
-	cout << "=====================================================" << endl;
-
-	list->InserAfter(80, 600); // previous of tail
-	cout << "||| Add 80 after 600 |||" << endl;
-	list->PrintList();
-	cout << "=====================================================";
-	cout << "[ | List details | ]\n";
-	cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
-	cout << "    data : " << list->head->data << endl;
-	cout << "    node next data: " << list->head->next->data << endl;
-
-	cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
-	cout << "    data : " << list->tail->data << endl;
-	cout << "    node prev data : " << list->tail->prev->data << endl;
-	cout << "=====================================================" << endl;
-
-	list->InserAfter(54, 50); // after tail
-	cout << "||| Add 54 after 50 |||" << endl;
-	list->PrintList();
-	cout << "=====================================================";
-	cout << "[ | List details | ]\n";
-	cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
-	cout << "    data : " << list->head->data << endl;
-	cout << "    node next data: " << list->head->next->data << endl;
-
-	cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
-	cout << "    data : " << list->tail->data << endl;
-	cout << "    node prev data : " << list->tail->prev->data << endl;
+	//cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	//cout << "    data : " << list->tail->data << endl;
+	//cout << "    node prev data : " << list->tail->prev->data << endl;
 
 
-	
+	//cout << "=====================================================" << endl;
+
+
+	////cout << "\nHead: " << list->head << "\nTail: " << list->tail;
+
+	//list->InsertBefore(90, 400); // previous of tail
+	//cout << "||| Add 90 before 400 |||" << endl;
+	//list->PrintList();
+	//cout << "=====================================================";
+	//cout << "[ | List details | ]\n";
+	//cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	//cout << "    data : " << list->head->data << endl;
+	//cout << "    node next data: " << list->head->next->data << endl;
+
+	//cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	//cout << "    data : " << list->tail->data << endl;
+	//cout << "    node prev data : " << list->tail->prev->data << endl;
+	//cout << "=====================================================" << endl;
+
+
+	//list->InsertBefore(77, 400); // previous of tail
+	//cout << "||| Add 77 before 400 |||" << endl;
+	//list->PrintList();
+	//cout << "=====================================================";
+	//cout << "[ | List details | ]\n";
+	//cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	//cout << "    data : " << list->head->data << endl;
+	//cout << "    node next data: " << list->head->next->data << endl;
+
+	//cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	//cout << "    data : " << list->tail->data << endl;
+	//cout << "    node prev data : " << list->tail->prev->data << endl;
+	//cout << "=====================================================" << endl;
+
+	//list->InsertBefore(80, 600); // previous of tail
+	//cout << "||| Add 80 before 600 |||" << endl;
+	//list->PrintList();
+	//cout << "=====================================================";
+	//cout << "[ | List details | ]\n";
+	//cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	//cout << "    data : " << list->head->data << endl;
+	//cout << "    node next data: " << list->head->next->data << endl;
+
+	//cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	//cout << "    data : " << list->tail->data << endl;
+	//cout << "    node prev data : " << list->tail->prev->data << endl;
+	//cout << "=====================================================" << endl;
+
+	//list->InsertBefore(54, 50); // after tail
+	//cout << "||| Add 54 before 50 |||" << endl;
+	//list->PrintList();
+	//cout << "=====================================================";
+	//cout << "[ | List details | ]\n";
+	//cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	//cout << "    data : " << list->head->data << endl;
+	//cout << "    node next data: " << list->head->next->data << endl;
+
+	//cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	//cout << "    data : " << list->tail->data << endl;
+	//cout << "    node prev data : " << list->tail->prev->data << endl;
+
+
+	//
 
 
 
