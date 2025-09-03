@@ -2,12 +2,12 @@
 #include<string>
 using namespace std;
 
-class LinkedListNode {
+class SinglyLinkedListNode {
 public:
 	int data = 0;
-	LinkedListNode* next = NULL;
+	SinglyLinkedListNode* next = NULL;
 
-	LinkedListNode(int _data) {
+	SinglyLinkedListNode(int _data) {
 		this->data = _data;
 		this->next = NULL;
 	}
@@ -16,12 +16,12 @@ public:
 
 class LinkedListIterator {
 public:
-	LinkedListNode* currentNode = NULL;
+	SinglyLinkedListNode* currentNode = NULL;
 
 public:
 	LinkedListIterator() { }
 
-	LinkedListIterator(LinkedListNode* node) { currentNode = node; }
+	LinkedListIterator(SinglyLinkedListNode* node) { currentNode = node; }
 
 	//TODO: the return data type may be NULL which is not suited with the return data type int CurrentData() 
 	/*int CurrentData() {
@@ -36,10 +36,10 @@ public:
 
 };
 
-class LinkedList {
+class SinglyLinkedList {
 public:
-	LinkedListNode* head;
-	LinkedListNode* tail;
+	SinglyLinkedListNode* head;
+	SinglyLinkedListNode* tail;
 	int length;
 	LinkedListIterator begin() {
 		LinkedListIterator itr(this->head);
@@ -47,6 +47,10 @@ public:
 	}
 
 	void PrintList() {
+		if (this->head == NULL) {
+			cout << "Empty List";
+			return;
+		}
 		for (LinkedListIterator itr = this->begin(); itr.currentNode != NULL; itr.next()) {
 			cout << itr.currentNode->data << " -> ";
 		}
@@ -54,7 +58,7 @@ public:
 	}
 
 	void InsertLast(int _data) {
-		LinkedListNode* AddedNode = new LinkedListNode(_data);
+		SinglyLinkedListNode* AddedNode = new SinglyLinkedListNode(_data);
 		if (this->head == NULL) {
 			this->head = AddedNode;
 			this->tail = AddedNode;
@@ -65,7 +69,7 @@ public:
 		}
 	}
 
-	LinkedListNode* FindNodeWithData(int data) {
+	SinglyLinkedListNode* FindNodeWithData(int data) {
 		//validations
 		// linkedlist is empty -> null
 		if (this->head == NULL) {
@@ -82,11 +86,11 @@ public:
 	}
 
 
-	LinkedListNode* InsertAfter(int _data, LinkedListNode* nodeToInsertAfter) {
+	SinglyLinkedListNode* InsertAfter(int _data, SinglyLinkedListNode* nodeToInsertAfter) {
 		if (this->head == NULL || nodeToInsertAfter == NULL)  //no data , no list -> no action
 			return NULL;
 
-		LinkedListNode* newNode = new LinkedListNode(_data);
+		SinglyLinkedListNode* newNode = new SinglyLinkedListNode(_data);
 
 		//default state 
 		newNode->next = nodeToInsertAfter->next;
@@ -100,9 +104,9 @@ public:
 	}
 
 	void InsertBefore(int newData, int DataAfter) {
-		LinkedListNode* newNode = new LinkedListNode(newData);
-		LinkedListNode* nodeAfter = NULL; 
-		LinkedListNode* nodeBefore = NULL;
+		SinglyLinkedListNode* newNode = new SinglyLinkedListNode(newData);
+		SinglyLinkedListNode* nodeAfter = NULL; 
+		SinglyLinkedListNode* nodeBefore = NULL;
 
 		// validation
 		// list is empty -> return  null 
@@ -129,7 +133,7 @@ public:
 
 	}
 
-	LinkedListNode* FindParent(LinkedListNode* node) {
+	SinglyLinkedListNode* FindParent(SinglyLinkedListNode* node) {
 		for (LinkedListIterator itr = this->begin(); itr.currentNode->next != NULL; itr.next()) {
 			if (itr.currentNode->next == node) {
 				return itr.currentNode ;
@@ -137,7 +141,7 @@ public:
 		}
 	}
 
-	void DeleteNode(LinkedListNode* node) {
+	void DeleteNode(SinglyLinkedListNode* node) {
 		if (node == NULL)  return;
 
 		// if length = 1 , node is the head and tail , delete head and tail value
@@ -153,7 +157,7 @@ public:
 
 		else {
 			//search for parent
-			LinkedListNode* parentNode = FindParent(node);
+			SinglyLinkedListNode* parentNode = FindParent(node);
 			parentNode->next = node->next;
 			// update tail if needed
 			if (this->tail == node) {
@@ -167,7 +171,7 @@ public:
 
 	void Delete(int data) {
 		//get node 
-		LinkedListNode* node = FindNodeWithData(data);
+		SinglyLinkedListNode* node = FindNodeWithData(data);
 		if (node == NULL) return;
 		DeleteNode(node);
 
@@ -186,26 +190,255 @@ public:
 
 };
 
+//////////////////////////////////////////////////////////////
+
+
+class DoublyLinkedListNode {
+public:
+	int data = 0;
+	DoublyLinkedListNode* next = NULL;
+	DoublyLinkedListNode* prev = NULL;
+
+	DoublyLinkedListNode(int _data) {
+		this->data = _data;
+		this->next = NULL;
+		this->prev = NULL;
+	}
+};
+
+
+class DoublyLinkedListIterator {
+private :
+	DoublyLinkedListNode* currentNode = NULL;
+
+public:
+	DoublyLinkedListIterator(DoublyLinkedListNode* node) {
+		this->currentNode = node;
+
+	}
+
+	DoublyLinkedListNode* CurrentNode() {
+		return this->currentNode;
+	}
+
+	int CurrentData() {
+		return currentNode->data;
+	}
+	DoublyLinkedListIterator next() {
+		this->currentNode = this->currentNode->next;
+		return *this;
+
+		//TODO: what is the real difference between this->currentNode = this->currentNode->next; return *this; and return new DoubdlyLinkedListIterator(currentNode->next);
+	}
+};
+
+class DoublyLinkedList {
+public:
+	DoublyLinkedListNode* head = NULL;
+	DoublyLinkedListNode* tail = NULL;
+	int length = 0;
+
+	DoublyLinkedListIterator begin() {
+		return DoublyLinkedListIterator(this->head);
+	}
+
+	DoublyLinkedListNode* FindNode(int data) {
+		if (this->head == NULL) return NULL; // list is empty
+
+		for (DoublyLinkedListIterator itr = this->begin(); itr.CurrentNode() != NULL; itr.next()) {
+			if(itr.CurrentData() == data)
+				return itr.CurrentNode();
+		}
+
+	}
+	// print doubly linked list 
+	void PrintList() {
+		if (this->head == NULL) {
+			cout << "Empty List";
+			return;
+		}
+
+		for (DoublyLinkedListIterator itr = this->begin(); itr.CurrentNode() != NULL; itr.next()) {
+			cout << itr.CurrentData() << " <=> ";
+		}
+		cout << '\n';
+	}
+
+	// insert Last
+	void InsertLast(int data) {
+		DoublyLinkedListNode* node = new  DoublyLinkedListNode(data);
+		if (this->head == NULL) { //list is empty
+			this->head = node;
+			this->tail = node;
+			return;
+		}
+		this->tail->next = node;
+		node->prev = this->tail;
+		this->tail = node;
+	}
+
+	// insert After 
+	void InserAfter(int insertedData, int beforeData) {
+		if (this->head == NULL) return; // list is empty, no action
+		DoublyLinkedListNode* NodeBefore = FindNode(beforeData);
+		if (NodeBefore == NULL) return; // node is not found no action
+
+		DoublyLinkedListNode* InsertedNode = new DoublyLinkedListNode(insertedData); // creating no to be inserted
+
+
+		//insertion process in the middle
+		InsertedNode->next = NodeBefore->next;
+		InsertedNode->prev = NodeBefore;
+		NodeBefore->next = InsertedNode;
+
+		// any chaning to NodeBefore will effect the existing data inside the linkedlist - they are just pointers that point to the same data 
+		// so in case the nodeBefore was the head - no nead to change head data it is already has been changed by the other pointer NodeBefore
+		if (NodeBefore == this->tail->prev) {
+			this->tail->prev = InsertedNode;
+			return;
+		}
+
+		if (NodeBefore == this->tail) {
+			cout << "Tail catched!" << endl;
+			this->tail = InsertedNode;
+		}
+
+
+	}
+        
+ 
+		
+
+	// insert Before
+	// delete node
+	// delete head
+	// delete tail
+	// Find node
+	// delete by value
+
+	
+
+};
+
 
 
 int main() {
+	//TODO: do the same fuctions on the douply linked list 
+	DoublyLinkedList* list = new DoublyLinkedList();
+	/*list->InsertLast(100);
+	list->InsertLast(200);
+	list->InsertLast(300);
+	list->InsertLast(400);
 
-	LinkedList* list = new LinkedList();
-	list->InsertLast(77);
-	list->PrintList(); cout << endl;
-	list->InsertBefore(22, 77); // 22-> 77
-	list->PrintList(); cout << endl;
-	list->InsertBefore(55, 77); // 22-> 55-> 77
-	list->PrintList(); cout << endl;
+	list->PrintList();*/
 
-	list->InsertBefore(88, 90); // no changing
-	list->PrintList(); cout << " no changing " << endl;
+	list->InserAfter(100, 200);  //no change 
+	if (list->head == NULL)
+		cout << "Empty list";
+
+	list->InsertLast(600);  
+	//list->InserAfter(300, 100);  // no change 
+	list->PrintList();  //600
+    //cout << "no chaging, selected node is not found\n";
+
+	
+	/*list->InserAfter(350, 500);*/
+	
+	cout << "||| adding 500, 400 ||| using insertLast\n";
+	list->InsertLast(500);
+	list->InsertLast(400);
+    list->PrintList();// 600, 500, 350, 400
+	//cout << "||| Insert after head |||\n";
+	//list->InserAfter(100, 600); // after head
+	//list->PrintList(); //600, 100, 500, 350, 400
+	cout << "=====================================================" << endl;
+	cout << "[ | List details | ]\n";
+	cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	cout << "    data : " << list->head->data << endl;
+	cout << "    node next data: " << list->head->next->data << endl;
+
+    cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	cout << "    data : " << list->tail->data << endl;
+	cout << "    node prev data : " << list->tail->prev->data << endl;
+	cout << "=====================================================" << endl << endl;
 
 
-	LinkedList* emptyList = new LinkedList();
-	cout << "The head of list2 : " << emptyList->head;
-	emptyList->InsertBefore(99, 100); //no change=ing
-	cout << "The head of list2 after tring adding before : " << emptyList->head;
+	list->InserAfter(50, 400); // after tail
+	cout << "||| Add 50 after 400 |||" << endl;
+	list->PrintList();
+	cout << "=====================================================";
+	cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	cout << "    data : " << list->head->data << endl;
+	cout << "    node next data: " << list->head->next->data << endl;
+
+	cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	cout << "    data : " << list->tail->data << endl;
+	cout << "    node prev data : " << list->tail->prev->data << endl;
+
+
+	cout << "=====================================================" << endl;
+
+
+	//cout << "\nHead: " << list->head << "\nTail: " << list->tail;
+
+	list->InserAfter(90, 400); // previous of tail
+	cout << "||| Add 90 after 400 |||" << endl;
+	list->PrintList();
+	cout << "=====================================================";
+	cout << "[ | List details | ]\n";
+	cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	cout << "    data : " << list->head->data << endl;
+	cout << "    node next data: " << list->head->next->data << endl;
+
+	cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	cout << "    data : " << list->tail->data << endl;
+	cout << "    node prev data : " << list->tail->prev->data << endl;
+	cout << "=====================================================" << endl;
+
+
+	list->InserAfter(77, 400); // previous of tail
+	cout << "||| Add 77 after 400 |||" << endl;
+	list->PrintList();
+	cout << "=====================================================";
+	cout << "[ | List details | ]\n";
+	cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	cout << "    data : " << list->head->data << endl;
+	cout << "    node next data: " << list->head->next->data << endl;
+
+	cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	cout << "    data : " << list->tail->data << endl;
+	cout << "    node prev data : " << list->tail->prev->data << endl;
+	cout << "=====================================================" << endl;
+
+	list->InserAfter(80, 600); // previous of tail
+	cout << "||| Add 80 after 600 |||" << endl;
+	list->PrintList();
+	cout << "=====================================================";
+	cout << "[ | List details | ]\n";
+	cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	cout << "    data : " << list->head->data << endl;
+	cout << "    node next data: " << list->head->next->data << endl;
+
+	cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	cout << "    data : " << list->tail->data << endl;
+	cout << "    node prev data : " << list->tail->prev->data << endl;
+	cout << "=====================================================" << endl;
+
+	list->InserAfter(54, 50); // after tail
+	cout << "||| Add 54 after 50 |||" << endl;
+	list->PrintList();
+	cout << "=====================================================";
+	cout << "[ | List details | ]\n";
+	cout << "\nHead:  (obj) " << list->head << "    details: " << endl;
+	cout << "    data : " << list->head->data << endl;
+	cout << "    node next data: " << list->head->next->data << endl;
+
+	cout << "\nTail: (obj) " << list->tail << "    details: " << endl;
+	cout << "    data : " << list->tail->data << endl;
+	cout << "    node prev data : " << list->tail->prev->data << endl;
+
+
+	
 
 
 
