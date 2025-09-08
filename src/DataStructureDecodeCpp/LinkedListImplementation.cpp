@@ -1,32 +1,42 @@
+//TODO: make it generic type using templates
+//TODO: add copy constructor and assignment operator to avoid shallow copy problems
+
+
 #include<iostream>
 #include<string>
 using namespace std;
 
+template <typename T>
 class SinglyLinkedListNode {
 public:
-	int data = 0;
-	SinglyLinkedListNode* next = NULL;
+	T data = T{};
+	SinglyLinkedListNode<T>* next = NULL;
 
-	SinglyLinkedListNode(int _data) {
+	SinglyLinkedListNode(T _data) {
 		this->data = _data;
 		this->next = NULL;
 	}
 };
 
 
+
+template <typename T>
 class LinkedListIterator {
 public:
-	SinglyLinkedListNode* currentNode = NULL;
+	SinglyLinkedListNode<T>* currentNode = NULL;
 
 public:
 	LinkedListIterator() { }
-
-	LinkedListIterator(SinglyLinkedListNode* node) { currentNode = node; }
+	LinkedListIterator(SinglyLinkedListNode<T>* node) { currentNode = node; }
 
 	//TODO: the return data type may be NULL which is not suited with the return data type int CurrentData() 
 	/*int CurrentData() {
 		return currentNode->data;
 	}*/
+
+	T CurrentData() {
+			return currentNode->data;
+	}
 
 
 	LinkedListIterator next() {
@@ -34,15 +44,38 @@ public:
 		return *this;
 	}
 
+	SinglyLinkedListNode<T>* CurrentNode() {
+		return this->currentNode;
+	}
+
 };
 
+
+template <typename T>
 class SinglyLinkedList {
 public:
-	SinglyLinkedListNode* head;
-	SinglyLinkedListNode* tail;
+	SinglyLinkedListNode<T>* head;
+	SinglyLinkedListNode<T>* tail;
 	int length;
-	LinkedListIterator begin() {
-		LinkedListIterator itr(this->head);
+
+	SinglyLinkedList() {
+		this->head = NULL;
+		this->tail = NULL;
+		this->length = 0;
+	}
+
+	SinglyLinkedList(SinglyLinkedList& other) {
+		this->head = other.head;
+		this->tail = other.tail;
+
+		//loop thriugh other list and copy each node data to new node in this list
+		for (LinkedListIterator<T> itr = other.begin(); itr.CurrentNode() != NULL; itr.next()) {
+			this->InsertLast(itr.CurrentData());
+		}
+	}
+
+	LinkedListIterator<T> begin() {
+		LinkedListIterator<T> itr(this->head);
 		return itr;
 	}
 
@@ -51,14 +84,15 @@ public:
 			cout << "Empty List";
 			return;
 		}
-		for (LinkedListIterator itr = this->begin(); itr.currentNode != NULL; itr.next()) {
+		for (LinkedListIterator<T> itr = this->begin(); itr.currentNode != NULL; itr.next()) {
 			cout << itr.currentNode->data << " -> ";
 		}
 		cout << '\n';
 	}
 
-	void InsertLast(int _data) {
-		SinglyLinkedListNode* AddedNode = new SinglyLinkedListNode(_data);
+
+	void InsertLast(T _data) {
+		SinglyLinkedListNode<T>* AddedNode = new SinglyLinkedListNode<T>(_data);
 		if (this->head == NULL) {
 			this->head = AddedNode;
 			this->tail = AddedNode;
@@ -67,9 +101,10 @@ public:
 			this->tail->next = AddedNode;
 			this->tail = AddedNode;
 		}
+		length++;
 	}
 
-	SinglyLinkedListNode* FindNodeWithData(int data) {
+	SinglyLinkedListNode<T>* FindNodeWithData(T _data) {
 		//validations
 		// linkedlist is empty -> null
 		if (this->head == NULL) {
@@ -77,8 +112,8 @@ public:
 		}
 
 		// use iterator to itrate through list and check for the linked list data 
-		for (LinkedListIterator itr = this->begin(); itr.currentNode != NULL; itr.next()) {
-			if (itr.currentNode->data == data)
+		for (LinkedListIterator<T> itr = this->begin(); itr.currentNode != NULL; itr.next()) {
+			if (itr.currentNode->data == _data)
 				return  itr.currentNode;
 		}
 
@@ -86,11 +121,11 @@ public:
 	}
 
 
-	SinglyLinkedListNode* InsertAfter(int _data, SinglyLinkedListNode* nodeToInsertAfter) {
+	SinglyLinkedListNode<T>* InsertAfter(T _data, SinglyLinkedListNode<T>* nodeToInsertAfter) {
 		if (this->head == NULL || nodeToInsertAfter == NULL)  //no data , no list -> no action
 			return NULL;
 
-		SinglyLinkedListNode* newNode = new SinglyLinkedListNode(_data);
+		SinglyLinkedListNode<T>* newNode = new SinglyLinkedListNode<T>(_data);
 
 		//default state 
 		newNode->next = nodeToInsertAfter->next;
@@ -98,15 +133,15 @@ public:
 		
         if (this->tail == nodeToInsertAfter)
 			this->tail = newNode;
-
+		length++;
 		return newNode;
 
 	}
 
-	void InsertBefore(int newData, int DataAfter) {
-		SinglyLinkedListNode* newNode = new SinglyLinkedListNode(newData);
-		SinglyLinkedListNode* nodeAfter = NULL; 
-		SinglyLinkedListNode* nodeBefore = NULL;
+	void InsertBefore(T newData, T DataAfter) {
+		SinglyLinkedListNode<T>* newNode = new SinglyLinkedListNode<T>(newData);
+		SinglyLinkedListNode<T>* nodeAfter = NULL; 
+		SinglyLinkedListNode<T>* nodeBefore = NULL;
 
 		// validation
 		// list is empty -> return  null 
@@ -119,7 +154,7 @@ public:
 		}
         
 		// search for existing of the nodeAfter
-		for (LinkedListIterator itr = this->begin(); itr.currentNode->next != NULL; itr.next()) {
+		for (LinkedListIterator<T> itr = this->begin(); itr.currentNode->next != NULL; itr.next()) {
 			if (itr.currentNode->next->data == DataAfter) {
 				nodeBefore = itr.currentNode;
 				nodeAfter = itr.currentNode->next;
@@ -130,18 +165,19 @@ public:
 
 		newNode->next = nodeAfter; // insert in the list middle
 		nodeBefore->next = newNode;
+		length++;
 
 	}
 
-	SinglyLinkedListNode* FindParent(SinglyLinkedListNode* node) {
-		for (LinkedListIterator itr = this->begin(); itr.currentNode->next != NULL; itr.next()) {
+	SinglyLinkedListNode<T>* FindParent(SinglyLinkedListNode<T>* node) {
+		for (LinkedListIterator<T> itr = this->begin(); itr.currentNode->next != NULL; itr.next()) {
 			if (itr.currentNode->next == node) {
 				return itr.currentNode ;
 			}
 		}
 	}
 
-	void DeleteNode(SinglyLinkedListNode* node) {
+	void DeleteNode(SinglyLinkedListNode<T>* node) {
 		if (node == NULL)  return;
 
 		// if length = 1 , node is the head and tail , delete head and tail value
@@ -157,7 +193,7 @@ public:
 
 		else {
 			//search for parent
-			SinglyLinkedListNode* parentNode = FindParent(node);
+			SinglyLinkedListNode<T>* parentNode = FindParent(node);
 			parentNode->next = node->next;
 			// update tail if needed
 			if (this->tail == node) {
@@ -169,9 +205,9 @@ public:
 
 	}
 
-	void Delete(int data) {
+	void Delete(T data) {
 		//get node 
-		SinglyLinkedListNode* node = FindNodeWithData(data);
+		SinglyLinkedListNode<T>* node = FindNodeWithData(data);
 		if (node == NULL) return;
 		DeleteNode(node);
 
@@ -190,21 +226,32 @@ public:
 
 };
 
-//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////Doubly linked list/////////////////////////////////////////////////////
 
+
+#include <variant>
+// Define a type alias for readability
+using MyVariant = std::variant<int, double, string>;
+// Overload operator<< so we can print MyVariant directly
+ostream& operator<<(ostream& os, const MyVariant& v) {
+	std::visit([&os](auto&& val) { os << val; }, v);
+	return os;
+}
 
 class DoublyLinkedListNode {
+
 public:
-	int data = 0;
+	MyVariant data = NULL;
 	DoublyLinkedListNode* next = NULL;
 	DoublyLinkedListNode* prev = NULL;
 
-	DoublyLinkedListNode(int _data) {
+	DoublyLinkedListNode(MyVariant _data) {
 		this->data = _data;
 		this->next = NULL;
 		this->prev = NULL;
 	}
 };
+
 
 
 class DoublyLinkedListIterator {
@@ -221,9 +268,10 @@ public:
 		return this->currentNode;
 	}
 
-	int CurrentData() {
+	MyVariant CurrentData() {
 		return currentNode->data;
 	}
+
 	DoublyLinkedListIterator next() {
 		this->currentNode = this->currentNode->next;
 		return *this;
@@ -232,24 +280,46 @@ public:
 	}
 };
 
+
+
 class DoublyLinkedList {
 public:
 	DoublyLinkedListNode* head = NULL;
 	DoublyLinkedListNode* tail = NULL;
 	int length = 0;
 
+	DoublyLinkedList() {
+		this->head = NULL;
+		this->tail = NULL;
+		this->length = 0;
+	}
+
+    DoublyLinkedList( DoublyLinkedList& other) {
+		this->head = other.head;
+		this->tail = other.tail;
+
+		//loop thriugh other list and copy each node data to new node in this list
+		for (DoublyLinkedListIterator itr = other.begin(); itr.CurrentNode() != NULL; itr.next()) {
+			this->InsertLast(itr.CurrentData());
+		}
+	}
+
+
+
 	DoublyLinkedListIterator begin() {
 		return DoublyLinkedListIterator(this->head);
 	}
 
-	DoublyLinkedListNode* FindNode(int data) {
+	DoublyLinkedListNode* FindNode(MyVariant data) {
 		if (this->head == NULL) return NULL; // list is empty
 
 		for (DoublyLinkedListIterator itr = this->begin(); itr.CurrentNode() != NULL; itr.next()) {
-			if(itr.CurrentData() == data)
+			if (itr.CurrentData() == data) {
+				cout << "Correct value\nThe current data is  " << itr.CurrentData() << " and the searched data is " << data << endl;
 				return itr.CurrentNode();
+			}
 		}
-
+		return NULL;
 	}
 	// print doubly linked list 
 	void PrintList() {
@@ -264,49 +334,67 @@ public:
 		cout << '\n';
 	}
 
+
 	// insert Last
-	void InsertLast(int data) {
+	void InsertLast(MyVariant data) {
 		DoublyLinkedListNode* node = new  DoublyLinkedListNode(data);
 		if (this->head == NULL) { //list is empty
 			this->head = node;
 			this->tail = node;
-			return;
+
 		}
+		else {
 		this->tail->next = node;
 		node->prev = this->tail;
 		this->tail = node;
 	}
+		length++;
+
+	}
 
 	// insert After 
-	void InserAfter(int insertedData, int beforeData) {
+	void InserAfter(MyVariant insertedData, MyVariant beforeData) {
 		if (this->head == NULL) return; // list is empty, no action
 		DoublyLinkedListNode* NodeBefore = FindNode(beforeData);
-		if (NodeBefore == NULL) return; // node is not found no action
-
-		DoublyLinkedListNode* InsertedNode = new DoublyLinkedListNode(insertedData); // creating no to be inserted
-
-
-		//insertion process in the middle
-		InsertedNode->next = NodeBefore->next;
-		InsertedNode->prev = NodeBefore;
-		NodeBefore->next = InsertedNode; 
-
-		// any chaning to NodeBefore will effect the existing data inside the linkedlist - they are just pointers that point to the same data 
-		// so in case the nodeBefore was the head - no nead to change head data it is already has been changed by the other pointer NodeBefore
-		if (NodeBefore == this->tail->prev) {
-			this->tail->prev = InsertedNode;
+		if (NodeBefore == NULL)
+		{
+			cout << "Node not found !" << endl;
 			return;
 		}
 
-		if (NodeBefore == this->tail) {
+		DoublyLinkedListNode* InsertedNode = new DoublyLinkedListNode(insertedData); // creating no to be inserted
+
+		// insertion process at the end
+		if (this->tail == NodeBefore) {
+			InsertedNode->next = NULL;
+			InsertedNode->prev = this->tail;
+			this->tail->next = InsertedNode;
 			this->tail = InsertedNode;
 		}
+		else {
+			//insertion process in the middle
+			cout << "tail node is " << this->tail->data << endl;
+			InsertedNode->next = NodeBefore->next;
+			InsertedNode->prev = NodeBefore;
+			NodeBefore->next->prev = InsertedNode;
+			NodeBefore->next = InsertedNode;
+		}
 
+		length++;
+		// any chaning to NodeBefore will effect the existing data inside the linkedlist - they are just pointers that point to the same data 
+		// so in case the nodeBefore was the head - no nead to change head data it is already has been changed by the other pointer NodeBefore
+
+		/*if (NodeBefore == this->tail->prev) {
+			this->tail->prev = InsertedNode;
+			return;
+		}*/
+
+		
 
 	}
 
 	// insert Before
-	void InsertBefore(int InsertedData, int SelectedData) {
+	void InsertBefore(MyVariant InsertedData, MyVariant SelectedData) {
 		// validation
 		if (this->head == NULL)
 			return;
@@ -336,7 +424,7 @@ public:
 			this->head = InsertedNode;
 		}
 	
-
+		length++;
 	}
 	// delete node
 	void DeleteNode(DoublyLinkedListNode* NodeToDelete) {
@@ -499,13 +587,27 @@ int main() {
 	//cout << "    node prev data : " << list->tail->prev->data << endl;
 	//////////////////////////////////////////////////////////////
     
-DoublyLinkedList* list = new DoublyLinkedList();
+SinglyLinkedList<string>* list1 = new SinglyLinkedList<string>();
 	
-    list->InsertLast(600);
-	cout << "List is : "; list->PrintList();
-	list->DeleteNode(list->FindNode(600)); // sengle node in list
-	cout << "After deleting 600 : "; list->PrintList();
+  list1->InsertLast("Kannoza");
+  list1->InsertLast("Farahat");
+  list1->InsertLast("Mohamed");
+  list1->InsertLast("Bloul");
+	
+	cout << "Singly List 1 is : "; list1->PrintList();
 
+
+	DoublyLinkedList* list2 = new DoublyLinkedList();
+
+	list2->InsertLast(45);
+	list2->InsertLast(45.2);
+	list2->InsertLast("Mohamed");
+	list2->InsertLast("Bloul");
+	list2->InsertBefore("Taweela", "Bloul");
+	list2->InserAfter("Samakka", "Bloul");
+	
+	cout << "List 1 is : "; list2->PrintList(); 
+	cout << "List length is : " << list2->length << endl;
 	/*list->InsertLast(45);
 	list->InsertBefore(800, 45);
 	cout << "new list : ";  list->PrintList(); 
