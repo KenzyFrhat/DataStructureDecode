@@ -1,25 +1,36 @@
-//# include <//////////////////////////////////////////////////////////////Stack using singly linked list/////////////////////////////////////////////////////
-//template <typename T>
-//class stack : SinglyLinkedList<T> {
-//
-//	void push(T data) {
-//		InsertHead(data);
-//	}
-//
-//	SinglyLinkedListNode* pop(T data) {
-//		return this->head;
-//		DeleteHead();
-//	}
-//
-//	SinglyLinkedListNode* Peek(T data) {
-//		return this->head;
-//	}
-//
-//
-//	int Size() {
-//		return this->length;
-//	}
-//
-//};
-//
-//>
+#include <iostream>
+#include <string>
+using namespace std;
+template <typename T>
+class Array {
+	int initialSize;
+	int currentSize;
+	int topIndex;
+	T* dataList;
+
+public :
+	Array(int size = 10) {
+		this->initialSize = size;
+		this->currentSize = size;
+		this->topIndex = -1;
+		this->dataList = new T[size];
+	}
+
+
+	void ResizeOrNot() {
+		if (topIndex < currentSize - 1) return;
+        
+		T* newArray = new T[currentSize + initiaSize];
+		copy(dataList, dataList + currentSize, newArray);
+		currentSize += initialSize;
+		delete[] this->dataList;
+		this->dataList = newArray;
+
+		
+	}
+
+	void 
+}
+
+template <typename T>
+class Stack
