@@ -1,5 +1,3 @@
-//TODO: make it generic type using templates
-//TODO: add copy constructor and assignment operator to avoid shallow copy problems
 
 
 #include<iostream>
@@ -57,11 +55,12 @@ public:
 	SinglyLinkedListNode<T>* head;
 	SinglyLinkedListNode<T>* tail;
 	int length;
-
-	SinglyLinkedList() {
+	bool unique = false;
+	SinglyLinkedList(bool unique = false) {
 		this->head = NULL;
 		this->tail = NULL;
 		this->length = 0;
+		this->unique = false;
 	}
 
 	SinglyLinkedList(SinglyLinkedList& other) {
@@ -91,8 +90,18 @@ public:
 	}
 
 
+	bool IsExist(T data) {
+		return (this->FindNodeWithData(data) ? true : false);
+	}
+
+	bool CanInsert(T data) {
+		return !(this->unique && IsExist(data));
+	}
+
+
 	void InsertLast(T _data) {
 		SinglyLinkedListNode<T>* AddedNode = new SinglyLinkedListNode<T>(_data);
+		if (!CanInsert(_data)) return; // no action if unique is true and data already exists
 		if (this->head == NULL) {
 			this->head = AddedNode;
 			this->tail = AddedNode;
@@ -121,53 +130,50 @@ public:
 	}
 
 
-	SinglyLinkedListNode<T>* InsertAfter(T _data, SinglyLinkedListNode<T>* nodeToInsertAfter) {
-		if (this->head == NULL || nodeToInsertAfter == NULL)  //no data , no list -> no action
-			return NULL;
+	SinglyLinkedListNode<T>* InsertAfter(T newData, T data) {
+		if (this->head == NULL)  // list is empty
+			return;
+		if (!CanInsert(newData)) return; // no action if unique is true and data already exists
 
-		SinglyLinkedListNode<T>* newNode = new SinglyLinkedListNode<T>(_data);
-
-		//default state 
-		newNode->next = nodeToInsertAfter->next;
-		nodeToInsertAfter->next = newNode;
-		
-        if (this->tail == nodeToInsertAfter)
-			this->tail = newNode;
-		length++;
-		return newNode;
-
-	}
-
-	void InsertBefore(T newData, T DataAfter) {
+		SinglyLinkedListNode<T>* SelectedNode = this->FindNodeWithData(data);
+		if (SelectedNode == NULL)
+			return;  // node is not found
+		   
 		SinglyLinkedListNode<T>* newNode = new SinglyLinkedListNode<T>(newData);
-		SinglyLinkedListNode<T>* nodeAfter = NULL; 
-		SinglyLinkedListNode<T>* nodeBefore = NULL;
 
-		// validation
-		// list is empty -> return  null 
-		if (this->head == NULL)  return ;  //list is empty
-		
-		if (this->head->data == DataAfter) {
-			newNode->next = this->head; // insert as head node
-			this->head = newNode;
-			return; 
-		}
-        
-		// search for existing of the nodeAfter
-		for (LinkedListIterator<T> itr = this->begin(); itr.currentNode->next != NULL; itr.next()) {
-			if (itr.currentNode->next->data == DataAfter) {
-				nodeBefore = itr.currentNode;
-				nodeAfter = itr.currentNode->next;
-			}
+		newNode->next = SelectedNode->next;
+		SelectedNode->next = newNode;
+
+		if (SelectedNode == this->tail) {
+			newNode = this->tail;
 		}
 
-		if (nodeAfter == NULL)  return; //node not found 
-
-		newNode->next = nodeAfter; // insert in the list middle
-		nodeBefore->next = newNode;
 		length++;
 
 	}
+
+	void InsertBefore(T newData, T Data) {
+		if (this->head == NULL)  return ;  //list is empty
+		if (!CanInsert(newData)) return; // no action if unique is true and data already exists
+		SinglyLinkedListNode<T>* SelectedNode = this->FindNodeWithData(Data);
+		if (SelectedNode == NULL) return;  // node not found
+		// create the new node to be inserted
+		SinglyLinkedListNode<T>* newNode = new SinglyLinkedListNode<T>(newData); 
+		// find parent of selected node
+		SinglyLinkedListNode<T>* parentNode = FindParent(SelectedNode);
+		// progress
+		newNode->next = SelectedNode;
+		if (parentNode == NULL) { // selected node is head node
+			this->head = newNode;
+		}
+		length++;
+
+	}
+
+	void InsertHead(T data) {
+		this->InsertBefore(data, this->head->data);
+	}
+
 
 	SinglyLinkedListNode<T>* FindParent(SinglyLinkedListNode<T>* node) {
 		for (LinkedListIterator<T> itr = this->begin(); itr.currentNode->next != NULL; itr.next()) {
@@ -202,7 +208,7 @@ public:
 		}
 
 		length--;
-
+		delete node;
 	}
 
 	void Delete(T data) {
@@ -471,7 +477,7 @@ public:
 
 
 
-int main() {
+//int main() {
 	//TODO: do the same fuctions on the douply linked list 
 	
 	/*list->InsertLast(100);
@@ -587,27 +593,27 @@ int main() {
 	//cout << "    node prev data : " << list->tail->prev->data << endl;
 	//////////////////////////////////////////////////////////////
     
-SinglyLinkedList<string>* list1 = new SinglyLinkedList<string>();
-	
-  list1->InsertLast("Kannoza");
-  list1->InsertLast("Farahat");
-  list1->InsertLast("Mohamed");
-  list1->InsertLast("Bloul");
-	
-	cout << "Singly List 1 is : "; list1->PrintList();
-
-
-	DoublyLinkedList* list2 = new DoublyLinkedList();
-
-	list2->InsertLast(45);
-	list2->InsertLast(45.2);
-	list2->InsertLast("Mohamed");
-	list2->InsertLast("Bloul");
-	list2->InsertBefore("Taweela", "Bloul");
-	list2->InserAfter("Samakka", "Bloul");
-	
-	cout << "List 1 is : "; list2->PrintList(); 
-	cout << "List length is : " << list2->length << endl;
+//SinglyLinkedList<string>* list1 = new SinglyLinkedList<string>();
+//	
+//  list1->InsertLast("Kannoza");
+//  list1->InsertLast("Farahat");
+//  list1->InsertLast("Mohamed");
+//  list1->InsertLast("Bloul");
+//	
+//	cout << "Singly List 1 is : "; list1->PrintList();
+//
+//
+//	DoublyLinkedList* list2 = new DoublyLinkedList();
+//
+//	list2->InsertLast(45);
+//	list2->InsertLast(45.2);
+//	list2->InsertLast("Mohamed");
+//	list2->InsertLast("Bloul");
+//	list2->InsertBefore("Taweela", "Bloul");
+//	list2->InserAfter("Samakka", "Bloul");
+//	
+//	cout << "List 1 is : "; list2->PrintList(); 
+//	cout << "List length is : " << list2->length << endl;
 	/*list->InsertLast(45);
 	list->InsertBefore(800, 45);
 	cout << "new list : ";  list->PrintList(); 
@@ -726,6 +732,4 @@ SinglyLinkedList<string>* list1 = new SinglyLinkedList<string>();
 
 	//
 
-
-
-}
+//}
