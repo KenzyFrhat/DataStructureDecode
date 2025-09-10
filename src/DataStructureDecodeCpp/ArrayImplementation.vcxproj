@@ -126,16 +126,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GetAt.cpp" />
     <ClCompile Include="LinkedListImplementation.cpp" />
     <ClCompile Include="Queue_BasedOn_Arraycpp.cpp" />
-    <ClCompile Include="Queue_BasedOn_LinkedList.cpp" />
-    <ClCompile Include="Resize.cpp" />
-    <ClCompile Include="StackBasedOnArray.cpp" />
     <ClCompile Include="StackBasedOnLinkedList.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ArrayHeader.h" />
+    <ClInclude Include="MyArrayHeader.h" />
+    <ClInclude Include="MyDoublyLinkedList.h" />
+    <ClInclude Include="MyQueueBasedOnArray.h" />
+    <ClInclude Include="MyQueueBasedOnLinkedList.h" />
+    <ClInclude Include="MySinglyLinkedList.h" />
+    <ClInclude Include="MyStackBasedOnArray.h" />
+    <ClInclude Include="MyStackBasedOnSinglyLinkedList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
