@@ -126,11 +126,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DictoinaryBasedOnArraycpp.cpp" />
     <ClCompile Include="LinkedListImplementation.cpp" />
-    <ClCompile Include="Queue_BasedOn_Arraycpp.cpp" />
     <ClCompile Include="StackBasedOnLinkedList.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DictionaryBasedOnArray.h" />
     <ClInclude Include="MyArrayHeader.h" />
     <ClInclude Include="MyDoublyLinkedList.h" />
     <ClInclude Include="MyQueueBasedOnArray.h" />

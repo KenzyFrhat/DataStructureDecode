@@ -21,7 +21,7 @@
     <ClCompile Include="StackBasedOnLinkedList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Queue_BasedOn_Arraycpp.cpp">
+    <ClCompile Include="DictoinaryBasedOnArraycpp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -45,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MyQueueBasedOnLinkedList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DictionaryBasedOnArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

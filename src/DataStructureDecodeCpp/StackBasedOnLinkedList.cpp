@@ -1,4 +1,5 @@
-//# include "  .h"
+# include "MyStackBasedOnSinglyLinkedList.h"
+using namespace MyStackBasedOnSinglyLinkedList;
 
 //int main(){
 //	stack<string>* myStack = new stack<string>;
