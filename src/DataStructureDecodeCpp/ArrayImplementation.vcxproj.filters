@@ -24,6 +24,9 @@
     <ClCompile Include="DictoinaryBasedOnArraycpp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HashTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyArrayHeader.h">
@@ -48,6 +51,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DictionaryBasedOnArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FNV-1aHash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

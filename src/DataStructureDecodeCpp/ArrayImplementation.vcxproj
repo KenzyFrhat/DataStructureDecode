@@ -127,11 +127,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DictoinaryBasedOnArraycpp.cpp" />
+    <ClCompile Include="HashTable.cpp" />
     <ClCompile Include="LinkedListImplementation.cpp" />
     <ClCompile Include="StackBasedOnLinkedList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DictionaryBasedOnArray.h" />
+    <ClInclude Include="FNV-1aHash.h" />
+    <ClInclude Include="HashTable.h" />
     <ClInclude Include="MyArrayHeader.h" />
     <ClInclude Include="MyDoublyLinkedList.h" />
     <ClInclude Include="MyQueueBasedOnArray.h" />
