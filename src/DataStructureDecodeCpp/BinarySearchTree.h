@@ -208,4 +208,83 @@ public:
 	}// FindNodeParent
 
 
+	private:
+	void BSDelete_LeafNode(TreeNode<T>* NodeToDelete) {
+		NodeToDelete = NULL;
+		delete NodeToDelete;
+
+	}//BSDelete_LeafNode
+
+	void BSDelete_NodeHasOneChild(TreeNode<T>* NodeToDelete) {
+		// get the existing childNode
+		TreeNode<T>* ChildNode = (NodeToDelete->Left == NULL ? NodeToDelete->Right : NodeToDelete->Left);
+		NodeToDelete->data = ChildNode->data; // change the data 
+
+		NodeToDelete->Left = ChildNode->Left;
+		NodeToDelete->Right = ChildNode->Right;
+
+		ChildNode = NULL;
+		delete ChildNode;
+
+
+	}//BSDelete_NodeHasOneChild
+
+	void BSDelete_NodeHasTwoChilds(TreeNode<T>* NodeToDelete) {
+    
+		// move to the right subtree 
+		TreeNode<T>* currentNode = NodeToDelete->Right;
+		TreeNode<T>* parent = NULL;
+
+		// search for the smallest value ( most left node)
+		while (currentNode->Left != NULL) { //-> break -> if the next left is null 
+			parent = currentNode;
+			currentNode = currentNode->Left;
+		}
+
+		// move value of the current node to the deleted node 
+		NodeToDelete->data = currentNode->data;
+
+		if (parent == NULL) //-> node to delete is the parent  
+		{   // get the right subtree before delete its point (currentNode)
+			NodeToDelete->Right = currentNode->Right;
+			// no need to do the same with the left side -> there is no left side !
+			
+		}
+		else  {
+		   // get the right subtree before delete its point (currentNode)
+			parent->Left = currentNode->Right;
+		}
+
+		// delete hole node with pointers
+		currentNode = NULL;
+		delete currentNode;
+
+	}//BSDelete_NodeHasTwoChilds
+
+	public:
+	void BSDelete(T _data) {
+		if (this->Root == NULL)
+			return; // tree is empty !
+
+		// find node 
+		TreeNode<T>* NodeToDelete =  BSFindNode(_data);
+
+		if (NodeToDelete == NULL)
+			return; // node not found !
+
+		if (NodeToDelete->Left == NULL && NodeToDelete->Right == NULL) { // case 1   LeafNode
+			BSDelete_LeafNode(NodeToDelete);
+		}
+		else if (NodeToDelete->Left != NULL && NodeToDelete->Right != NULL) {  // case 3   NodeHasTwoChilds
+			BSDelete_NodeHasTwoChilds(NodeToDelete);
+		}
+		else { // case 2 NodeHasOneChild
+            BSDelete_NodeHasOneChild(NodeToDelete);
+		}
+
+
+	}//BSDelete
+
+
+
 };//BinarySearchClass
