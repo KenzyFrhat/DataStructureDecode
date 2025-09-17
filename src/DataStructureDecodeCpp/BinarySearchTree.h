@@ -105,6 +105,27 @@ public:
 
 	}// print
 
+	TreeNode<T>* BSFindNode(T _data) {
+
+		if (this->Root == NULL) return NULL;
+		TreeNode<T>* currentNode = this->Root;
+		while (currentNode != NULL) { // if exist the while loop -> tree is finished 
+			if (_data == currentNode->data) {
+				return currentNode;
+			}
+			if (_data > currentNode->data) {
+				currentNode = currentNode->Right;
+			}
+			else { // _data < currentNode->data
+				currentNode = currentNode->Left;
+			}
+		}
+
+		return NULL; // node not found 
+	}// BSFindNode
+
+
+
 	TreeNode<T>* FindParentNode(T _data) {
 
 		if (this->Root == NULL) {
