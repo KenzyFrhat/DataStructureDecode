@@ -1,6 +1,7 @@
 #pragma once
 
 # include <iostream>
+#include <algorithm>
 # include <string>
 #include <queue>
 using namespace std;
@@ -102,8 +103,16 @@ public:
 
 	}// print
 
+	int InternalHight(TreeNode<T>* Node) {
+		if (Node == NULL) return 0;
+		return 1 + max(InternalHight(Node->Left), InternalHight(Node->Right));
+	}
 
+	int Hight() {
+		return InternalHight(this->Root);
+	}
 
+	
 };//BinaryTree
 
 
