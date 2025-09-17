@@ -105,6 +105,32 @@ public:
 
 	}// print
 
+	void InternalPrintInOrder(TreeNode<T>* node) {
+
+		if (node->Left != NULL)
+			InternalPrintInOrder(node->Left);
+
+		cout << node->data << " -> ";
+
+		if (node->Right)
+			InternalPrintInOrder(node->Right);
+
+	}
+
+	void PrintInOrder() {
+		if (this->Root == NULL)
+		{
+			cout << "Empty Tree!";
+			return;
+		}
+
+		InternalPrintInOrder(this->Root);
+	}
+
+
+	
+
+
 	TreeNode<T>* BSFindNode(T _data) {
 
 		if (this->Root == NULL) return NULL;
@@ -210,7 +236,24 @@ public:
 
 	private:
 	void BSDelete_LeafNode(TreeNode<T>* NodeToDelete) {
-		NodeToDelete = NULL;
+		TreeNode<T>* parent = FindParentNode(NodeToDelete->data);
+
+		if (parent == NULL) // it is the root 
+		{
+			this->Root = NULL;
+			return;
+		}
+
+		if(parent->Left == NodeToDelete)
+		{
+			parent->Left = NULL;
+		}
+		else if(parent->Right == NodeToDelete){ //TODO: isn't it supposed to be both NodeToDelete and (parent->Left Or parent->Right) the same data and any operation on ( parent -> left for example ) or NodeToDelete must affect the data ?? 
+			parent->Right = NULL;
+		}
+
+		 //NodeToDelete = NULL;
+
 		delete NodeToDelete;
 
 	}//BSDelete_LeafNode
