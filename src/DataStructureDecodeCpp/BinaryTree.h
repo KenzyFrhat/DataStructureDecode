@@ -139,6 +139,52 @@ public:
 		InternalPreOrder(this->Root);
 	}
 	
+
+	void InternalInOrder(TreeNode<T>* node) {
+
+		if (node->Left != NULL)
+			InternalInOrder(node->Left);
+		    
+		cout << node->data << " -> ";
+
+		if (node->Right)
+			InternalInOrder(node->Right);
+
+	}
+
+	void InOrder() {
+		if (this->Root == NULL)
+		{
+			cout << "Empty Tree!";
+			return;
+		}
+
+		InternalInOrder(this->Root);
+	}
+
+
+	void InternalPostOrder(TreeNode<T>* node) {
+
+		if (node->Left != NULL)
+			InternalPostOrder(node->Left);
+
+		if (node->Right)
+		InternalPostOrder(node->Right);
+
+	
+        cout << node->data << " -> ";
+	}
+
+	void PostOrder() {
+		if(this->Root == NULL) {
+			cout << "Empty Tree!";
+			return;
+		}
+
+		InternalPostOrder(this->Root);
+
+	}
+
 };//BinaryTree
 
 

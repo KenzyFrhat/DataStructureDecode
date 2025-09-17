@@ -15,7 +15,12 @@ int main() {
 	Tree->Insert('H');
 
 	//cout << Tree->Hight();
+	cout << "PreOrder Treaversal: ";
 	Tree->PreOrder();
+	cout << "\nInorder Traversal : ";
+	Tree->InOrder();
+	cout << "\nPostorder Traversal : ";
+	Tree->PostOrder();
 
 
 }
