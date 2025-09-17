@@ -125,6 +125,47 @@ public:
 	}// BSFindNode
 
 
+	TreeNode<T>* BSFindParentNode(T _data) {
+
+		if (this->Root == NULL)
+			return NULL;
+
+		if (_data == this->Root->data)
+			return NULL; // no parent for the root node
+
+
+	    TreeNode<T>* currentNode = this->Root;  // start with Root node 
+
+		while (currentNode != NULL) { // if exist the while loop -> tree is finished 
+			
+			if (_data > currentNode->data) { // right
+				if (currentNode->Right == NULL)
+					return NULL; // reached at the end but not found !
+
+				if (_data == currentNode->Right->data)
+					return currentNode;
+				else
+					currentNode = currentNode->Right;
+			}//big if
+
+			else {
+				if (_data < currentNode->data) { // Left
+					if (currentNode->Left == NULL)
+						return NULL; // reached at the end but not found !
+
+					if (_data == currentNode->Left->data)
+						return currentNode;
+					else
+						currentNode = currentNode->Left;
+				}
+			}// big else
+
+
+		}// while
+
+		return NULL; // node not found 
+
+	}// BSFindNode
 
 	TreeNode<T>* FindParentNode(T _data) {
 
@@ -165,5 +206,6 @@ public:
 		return NULL;
 
 	}// FindNodeParent
+
 
 };//BinarySearchClass
