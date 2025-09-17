@@ -3,6 +3,7 @@
 # include <iostream>
 # include <string>
 #include <queue>
+# include <vector>
 using namespace std;
 
 template <typename Tdata>
@@ -328,6 +329,37 @@ public:
 
 	}//BSDelete
 
+	void CopyDataInOrderToArray(TreeNode<T>* StartNode, vector<TreeNode<T>*>& BSTreeNodes) {
+		if (StartNode == NULL) {
+			return;
+		}
+		CopyDataInOrderToArray(StartNode->Left, BSTreeNodes);
+		BSTreeNodes.push_back(StartNode);
+		CopyDataInOrderToArray(StartNode->Right, BSTreeNodes);
+
+	}
+
+	TreeNode<T>* RecursiveBalanced(int start, int end, vector< TreeNode<T>* > &BSTreeNodes) {
+		if (start > end) return NULL;
+		int mid = (start + end) / 2;
+		TreeNode<T>* newRoot = BSTreeNodes[mid];
+		newRoot->Left = RecursiveBalanced(start, mid - 1, BSTreeNodes);  // left part 
+		newRoot->Right = RecursiveBalanced(mid + 1, end, BSTreeNodes);
+		return newRoot;
+	}
+	
+	void Balance() {
+		vector<TreeNode<T>*> BSTreeNodes ;
+		CopyDataInOrderToArray(this->Root, BSTreeNodes);
+		this->Root = RecursiveBalanced(0, BSTreeNodes.size() - 1, BSTreeNodes);
+	}
+
+
+	///////////////////////////////////////////////
+	
+	
+
+	
 
 
 };//BinarySearchClass
