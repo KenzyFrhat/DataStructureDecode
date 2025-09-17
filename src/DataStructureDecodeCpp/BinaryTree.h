@@ -112,6 +112,32 @@ public:
 		return InternalHight(this->Root);
 	}
 
+	void InternalPreOrder(TreeNode<T>* node) {
+       
+		cout << node->data << " -> ";
+
+		if (node->Left != NULL) {
+			
+			InternalPreOrder(node->Left);
+		}
+
+	    if (node->Right != NULL) {
+
+			InternalPreOrder(node->Right);
+
+		}
+	}
+
+	void PreOrder() {
+
+		if (this->Root == NULL) {
+			cout << "Empty Tree!";
+			return;
+		}
+
+
+		InternalPreOrder(this->Root);
+	}
 	
 };//BinaryTree
 

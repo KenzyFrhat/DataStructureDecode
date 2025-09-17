@@ -13,13 +13,9 @@ int main() {
 	Tree->Insert('M');
 	Tree->Insert('P');
 	Tree->Insert('H');
-	Tree->Insert('Q');
-	Tree->Insert('W');
-	Tree->Insert('V');
-	Tree->Insert('K');
-	Tree->Insert('M');
-	Tree->Insert('P');
 
-	cout << Tree->Hight();
+	//cout << Tree->Hight();
+	Tree->PreOrder();
+
 
 }
